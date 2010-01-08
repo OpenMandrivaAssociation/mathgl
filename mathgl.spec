@@ -37,6 +37,7 @@ BuildRequires:	swig
 BuildRequires:	libjpeg-devel
 BuildRequires:	giflib-devel
 BuildRequires:	texinfo
+BuildRequires:	texi2html
 
 %description
 MathGL is a library for making high-quality scientific graphics. It 
