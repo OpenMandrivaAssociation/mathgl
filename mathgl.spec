@@ -15,7 +15,7 @@
 
 Name:		mathgl
 Version:	1.10
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Library for scientific graphics
 License:	GPLv2+
 Group:		System/Libraries
