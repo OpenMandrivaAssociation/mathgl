@@ -1,48 +1,56 @@
-%define mainlibmajor 5
-%define mainlibname %mklibname mgl %{mainlibmajor}
-%define fltklibmajor 5
-%define fltklibname %mklibname mgl-fltk %{fltklibmajor}
-%define glutlibmajor 5
-%define glutlibname %mklibname mgl-glut %{glutlibmajor}
-%define qtlibmajor 5
-%define qtlibname %mklibname mgl-qt %{qtlibmajor}
-%define wxlibmajor 5
-%define wxlibname %mklibname mgl-wx %{wxlibmajor}
-%define develname %mklibname mgl -d
-%define staticdevelname %mklibname mgl -d -s
+%define		mainlibmajor 5
+%define		mainlibname %mklibname mgl %{mainlibmajor}
+%define		fltklibmajor 5
+%define		fltklibname %mklibname mgl-fltk %{fltklibmajor}
+%define		glutlibmajor 5
+%define		glutlibname %mklibname mgl-glut %{glutlibmajor}
+%define		qtlibmajor 5
+%define		qtlibname %mklibname mgl-qt %{qtlibmajor}
+%define		wxlibmajor 5
+%define		wxlibname %mklibname mgl-wx %{wxlibmajor}
+%define		develname %mklibname mgl -d
+%define		staticdevelname %mklibname mgl -d -s
 
-%define octave_api api-v37
+%define		octave_api api-v37
+
+# we need x.y.z format here
+%define		pkgversion 1.11.1
 
 Name:		mathgl
-Version:	1.10
-Release:	%mkrel 3
+# 1.11.2 seems to be broken
+Version:	1.11.1.1
+Release:	%mkrel 1
 Summary:	Library for scientific graphics
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://mathgl.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/mathgl/%{name}-%{version}.tgz
+Source0:	http://downloads.sourceforge.net/mathgl/%{name}-%{version}.tar.gz
 Patch0:		mathgl-1.10-mdv-fix-fltk-include-path.patch
-Patch1:		mathgl-1.10-mdv-fix-mgl_qt_example-linkage.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
+Patch1:		mathgl-1.11.2-zlib.patch
+Patch2:		mathgl-1.11.1.1-lz.patch
+Patch3:		mathgl-1.11.1.1-oct.patch
 BuildRequires:	qt4-devel
 BuildRequires:	gsl-devel
 BuildRequires:	GL-devel
+%if %{mdvver} <= 201100
 BuildRequires:	mesaglut-devel
+%else
+BuildRequires:	freeglut-devel
+%endif
 BuildRequires:	fltk-devel
 BuildRequires:	hdf5-devel
-BuildRequires:	libwxgtk2.8-devel
+BuildRequires:	wxgtku-devel
 BuildRequires:	octave-devel
-BuildRequires:	swig
+BuildRequires:	swig >= 1:2.0
 BuildRequires:	libjpeg-devel
 BuildRequires:	giflib-devel
 BuildRequires:	texinfo
 BuildRequires:	texi2html
 
 %description
-MathGL is a library for making high-quality scientific graphics. It 
-provides fast data plotting and handling of large data arrays. 
-MathGL has Qt, FLTK, OpenGL interfaces and can be used even from 
+MathGL is a library for making high-quality scientific graphics. It
+provides fast data plotting and handling of large data arrays.
+MathGL has Qt, FLTK, OpenGL interfaces and can be used even from
 console programs.
 
 %package tools
@@ -79,7 +87,7 @@ This package contains the MathGL bindings for octave.
 %package doc
 Summary:	Documentation for MathGL
 Group:		Sciences/Mathematics
-Requires(post): info-install
+Requires(post):	info-install
 Requires(preun): info-install
 
 %description doc
@@ -150,7 +158,9 @@ This package contains the MathGL static development files.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1 -b .linkage
+%patch1 -p0
+%patch2 -p1
+%patch3 -p1
 
 # fix EOL
 for i in AUTHORS COPYRIGHT README
@@ -160,49 +170,67 @@ done
 
 %build
 autoreconf
-%configure --enable-all --enable-octave
+%configure2_5x \
+	--enable-double \
+	--enable-pthread \
+	--enable-gsl \
+	--enable-glut \
+	--enable-hdf5 \
+	--enable-hdf5_18 \
+	--enable-gif \
+	--enable-jpeg \
+	--enable-fltk \
+	--enable-wx \
+	--enable-qt \
+	--enable-octave \
+	--enable-testio \
+	--enable-docs
 %make
 
 %install
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 %makeinstall
 
-# octave .oct file fix and install 
-# from Fedora specfile
-
-mkdir -p temp-octave
+######################################################################
+# octave .oct file fix and install                                   #
+# from Fedora specfile                                               #
+######################################################################
+%__mkdir_p temp-octave
 
 pushd .
 cd temp-octave
 #Decompress tarballed "oct" file and remove tarball
 tar -zxf %{buildroot}/%{_datadir}/%{name}/octave/%{name}.tar.gz
-rm %{buildroot}/%{_datadir}/%{name}/octave/%{name}.tar.gz
+%__rm %{buildroot}/%{_datadir}/%{name}/octave/%{name}.tar.gz
 
 #Copy the .oct file and supporting files to octave packages dir
-mkdir -p %{buildroot}/%{_libexecdir}/octave/packages/%{name}-1.10.0/
+%__mkdir_p %{buildroot}/%{_libexecdir}/octave/packages/%{name}-%{pkgversion}/
 #Remove empty INDEX file
-rm %{name}/INDEX
+%__rm %{name}/INDEX
 
 #Fix PKG_ADD
 echo "pkg load mathgl" > %{name}/PKG_ADD
 echo "mathgl;" >> %{name}/PKG_ADD
 
 #fix wrong version number in description
-sed -i 's/1.9/1.10/' %{name}/DESCRIPTION
+%__sed -i 's/1.9/1.11/' %{name}/DESCRIPTION
 
-#We cannot use version macro with octave package search,
+# We cannot use version macro with octave package search,
 # as pkg.m assumes a x.y.z format for packages. Failing
-# to do this renders the plugin inoperable
-cp -pR %{name}/inst/* %{buildroot}/%{_libexecdir}/octave/packages/%{name}-1.10.0/
+# to do this renders the plugin inoperable. So we use pkgversion
+%__cp -pR %{name}/inst/* %{buildroot}/%{_libexecdir}/octave/packages/%{name}-%{pkgversion}/
 
 #packinfo dir is required, or octave will not find the dir in recursive search
-mkdir -p %{buildroot}/%{_datadir}/octave/packages/%{name}-1.10.0/packinfo
-cp -p %{name}/[A-Z]* %{buildroot}/%{_datadir}/octave/packages/%{name}-1.10.0/packinfo
+%__mkdir_p %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo
+%__cp -p %{name}/COPYING %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
+%__cp -p %{name}/DESCRIPTION %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
+%__cp -p %{name}/PKG_ADD %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
 
-popd 
+popd
+######################################################################
 
 %clean
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 
 %post octave
 %{_bindir}/test -x %{_bindir}/octave && %{_bindir}/octave -q -H --no-site-file --eval "pkg('rebuild');" || :
