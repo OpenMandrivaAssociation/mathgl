@@ -19,7 +19,7 @@
 Name:		mathgl
 # 1.11.2 seems to be broken
 Version:	1.11.1.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Library for scientific graphics
 License:	GPLv2+
 Group:		System/Libraries
@@ -87,8 +87,10 @@ This package contains the MathGL bindings for octave.
 %package doc
 Summary:	Documentation for MathGL
 Group:		Sciences/Mathematics
+%if %{mdvver} <= 201100
 Requires(post):	info-install
 Requires(preun): info-install
+%endif
 
 %description doc
 This package contains the MathGL documentation.
@@ -238,6 +240,7 @@ popd
 %postun octave
 %{_bindir}/test -x %{_bindir}/octave && %{_bindir}/octave -q -H --no-site-file --eval "pkg('rebuild');" || :
 
+%if %{mdvver} <= 201100
 %post doc
 %_install_info %{name}_en.info
 %_install_info %{name}_ru.info
@@ -245,57 +248,48 @@ popd
 %preun doc
 %_remove_install_info %{name}_en.info
 %_remove_install_info %{name}_ru.info
+%endif
 
 %files tools
-%defattr(-,root,root,-)
 %{_bindir}/mgl2*
 %{_bindir}/mglview
 
 %files examples
-%defattr(-,root,root,-)
 %{_bindir}/mgl*_example
 
 %files data
-%defattr(-,root,root,-)
 %{_datadir}/%{name}
 
 %files octave
-%defattr(-,root,root,-)
 %{_datadir}/octave/packages/*
 %{_libexecdir}/octave/packages/*
 
 %files doc
-%defattr(-,root,root,-)
 %{_docdir}/%{name}
 %{_infodir}/*
 
 %files -n %{mainlibname}
-%defattr(-,root,root,-)
 %doc AUTHORS COPYING COPYRIGHT ChangeLog.txt NEWS README
 %{_libdir}/libmgl.so.*
 
 %files -n %{fltklibname}
-%defattr(-,root,root,-)
 %{_libdir}/libmgl-fltk.so.*
 
 %files -n %{glutlibname}
-%defattr(-,root,root,-)
 %{_libdir}/libmgl-glut.so.*
 
 %files -n %{qtlibname}
-%defattr(-,root,root,-)
 %{_libdir}/libmgl-qt.so.*
 
 %files -n %{wxlibname}
-%defattr(-,root,root,-)
 %{_libdir}/libmgl-wx.so.*
 
 %files -n %{develname}
-%defattr(-,root,root,-)
 %{_libdir}/libmgl*.so
+%if %{mdvver} <= 201100
 %{_libdir}/*.la
+%endif
 %{_includedir}/mgl
 
 %files -n %{staticdevelname}
-%defattr(-,root,root,-)
 %{_libdir}/*.a
