@@ -222,13 +222,13 @@ echo "mathgl;" >> %{name}/PKG_ADD
 # We cannot use version macro with octave package search,
 # as pkg.m assumes a x.y.z format for packages. Failing
 # to do this renders the plugin inoperable. So we use pkgversion
-%__cp -pR %{name}/inst/* %{buildroot}/%{_libexecdir}/octave/packages/%{name}-%{pkgversion}/
+cp -pR %{name}/inst/* %{buildroot}/%{_libexecdir}/octave/packages/%{name}-%{pkgversion}/
 
 #packinfo dir is required, or octave will not find the dir in recursive search
 %__mkdir_p %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo
-%__cp -p %{name}/COPYING %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
-%__cp -p %{name}/DESCRIPTION %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
-%__cp -p %{name}/PKG_ADD %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
+cp -p %{name}/COPYING %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
+cp -p %{name}/DESCRIPTION %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
+cp -p %{name}/PKG_ADD %{buildroot}/%{_datadir}/octave/packages/%{name}-%{pkgversion}/packinfo/
 
 popd
 ######################################################################
