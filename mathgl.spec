@@ -29,6 +29,7 @@ Patch0:		mathgl-1.10-mdv-fix-fltk-include-path.patch
 Patch1:		mathgl-1.11.2-zlib.patch
 Patch2:		mathgl-1.11.1.1-lz.patch
 Patch3:		mathgl-1.11.1.1-oct.patch
+Patch4:		mathgl-1.11.1.1-gz.patch
 BuildRequires:	qt4-devel
 BuildRequires:	gsl-devel
 BuildRequires:	GL-devel
@@ -163,6 +164,7 @@ This package contains the MathGL static development files.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # fix EOL
 for i in AUTHORS COPYRIGHT README
