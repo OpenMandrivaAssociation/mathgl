@@ -1,0 +1,20 @@
+--- mgl/mgl_data_png.cpp
++++ mgl/mgl_data_png.cpp
+@@ -20,6 +20,7 @@
+ #include <stdlib.h>
+ #ifndef NO_PNG
+ #include <png.h>
++#include <zlib.h>
+ #endif
+ #include "mgl/mgl_data.h"
+ #include "mgl/mgl_c.h"
+--- mgl/mgl_export.cpp
++++ mgl/mgl_export.cpp
+@@ -25,6 +25,7 @@
+ #include <stdarg.h>
+ #ifndef NO_PNG
+ #include <png.h>
++#include <zlib.h>
+ #endif
+ #ifdef HAVE_JPEG
+ extern "C" {

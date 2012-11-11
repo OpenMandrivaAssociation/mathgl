@@ -1,0 +1,24 @@
+diff -urN mathgl-1.11.1.1/mgl/Makefile.am mathgl-1.11.1.1-patched/mgl/Makefile.am
+--- mathgl-1.11.1.1/mgl/Makefile.am	2011-03-22 06:13:23.000000000 +1000
++++ mathgl-1.11.1.1-patched/mgl/Makefile.am	2012-01-16 19:34:20.908516799 +1100
+@@ -16,7 +16,7 @@
+ WIDGETS += -DWITH_GLUT
+ endif
+ 
+-libmgl_la_LIBADD = $(PNG_LIBS) $(GL_LIBS) $(LOPENMP)
++libmgl_la_LIBADD = $(PNG_LIBS) $(GL_LIBS) $(LOPENMP) -lz
+ libmgl_la_LDFLAGS = -no-undefined -version-info $(MGL_CURRENT):$(MGL_REVISION):$(MGL_AGE)
+ 
+ libmgl_la_CXXFLAGS = $(WIDGETS) -DMGL_FONT_PATH=\"$(datadir)/$(PACKAGE)/fonts/\" \
+diff -urN mathgl-1.11.1.1/mgl/Makefile.in mathgl-1.11.1.1-patched/mgl/Makefile.in
+--- mathgl-1.11.1.1/mgl/Makefile.in	2011-03-25 04:42:16.000000000 +1000
++++ mathgl-1.11.1.1-patched/mgl/Makefile.in	2012-01-16 19:28:32.746520486 +1100
+@@ -111,7 +111,7 @@
+ libmgl_la_OBJECTS = $(am_libmgl_la_OBJECTS)
+ libmgl_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libmgl_la_CXXFLAGS) \
+-	$(CXXFLAGS) $(libmgl_la_LDFLAGS) $(LDFLAGS) -o $@
++	$(CXXFLAGS) $(libmgl_la_LDFLAGS) $(LDFLAGS) -lz -o $@
+ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/mgl
+ depcomp = $(SHELL) $(top_srcdir)/config/depcomp
+ am__depfiles_maybe = depfiles

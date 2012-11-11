@@ -1,0 +1,12 @@
+diff -p -up mathgl-1.10/include/mgl/mgl_fltk.h.includepath mathgl-1.10/include/mgl/mgl_fltk.h
+--- mathgl-1.10/include/mgl/mgl_fltk.h.includepath	2010-01-06 23:35:14.000000000 +0100
++++ mathgl-1.10/include/mgl/mgl_fltk.h	2010-01-06 23:35:26.000000000 +0100
+@@ -26,7 +26,7 @@
+ #endif
+ 
+ #include <FL/Fl.H>
+-#include <Fl/Fl_Scroll.H>
++#include <FL/Fl_Scroll.H>
+ #include <FL/Fl_Button.H>
+ #include <FL/Fl_Counter.H>
+ #include <FL/Fl_Menu_Bar.H>

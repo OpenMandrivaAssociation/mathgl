@@ -1,0 +1,13 @@
+diff -urN mathgl-1.11.1.1/configure.ac mathgl-1.11.1.1-patched/configure.ac
+--- mathgl-1.11.1.1/configure.ac	2011-03-22 06:13:29.000000000 +1000
++++ mathgl-1.11.1.1-patched/configure.ac	2012-01-16 19:52:42.222505137 +1100
+@@ -361,7 +361,8 @@
+ # find Octave arch
+     AC_MSG_CHECKING([for Octave arch])
+     OCTAVE_ARCH=`$OCTAVE -p CANONICAL_HOST_TYPE`-`$OCTAVE -p API_VERSION`
+-    OCTAVE_INCFLAGS="-I`$OCTAVE -p OCTINCLUDEDIR`"
++    OCTINCLUDEDIR="`$OCTAVE -p OCTINCLUDEDIR`"
++    OCTAVE_INCFLAGS="-I$OCTINCLUDEDIR -I$OCTINCLUDEDIR/.."
+     AC_MSG_RESULT([$OCTAVE_ARCH])
+     AC_SUBST(OCTAVE_ARCH,[$OCTAVE_ARCH])
+     AC_SUBST(OCTAVE_INCFLAGS,[$OCTAVE_INCFLAGS])

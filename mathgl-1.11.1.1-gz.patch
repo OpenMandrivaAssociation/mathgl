@@ -1,0 +1,69 @@
+diff -urN mathgl-1.11.1.1/mgl/mgl_eps.cpp mathgl-1.11.1.1-patched/mgl/mgl_eps.cpp
+--- mathgl-1.11.1.1/mgl/mgl_eps.cpp	2011-03-22 06:13:23.000000000 +1000
++++ mathgl-1.11.1.1-patched/mgl/mgl_eps.cpp	2012-06-05 02:56:58.559237430 +1100
+@@ -305,7 +305,7 @@
+ 	time(&now);
+ 
+ 	bool gz = fname[strlen(fname)-1]=='z';
+-	void *fp = gz ? gzopen(fname,"wt") : fopen(fname,"wt");
++	void *fp = gz ? static_cast<void *>(gzopen(fname,"wt")) : fopen(fname,"wt");
+ 	if(!fp)		{	SetWarn(mglWarnOpen,fname);	return;	}
+ 	mgl_printf(fp, gz, "%%!PS-Adobe-3.0 EPSF-3.0\n%%%%BoundingBox: 0 0 %d %d\n",Width,Height);
+ 	mgl_printf(fp, gz, "%%%%Creator: MathGL library\n%%%%Title: %s\n",descr ? descr : fname);
+@@ -453,7 +453,7 @@
+ 	}
+ 	for(i=0;i<pNum;i++)		if(P[i].type==-1)	P[i].type = 1;
+ 	mgl_printf(fp, gz, "\nshowpage\n%%%%EOF\n");
+-	if(gz)	gzclose(fp);	else	fclose((FILE *)fp);
++	if(gz)	gzclose((gzFile)fp);	else	fclose((FILE *)fp);
+ }
+ //-----------------------------------------------------------------------------
+ void mglGraphPS::WriteSVG(const char *fname,const char *descr)
+@@ -464,7 +464,7 @@
+ 	time(&now);
+ 
+ 	bool gz = fname[strlen(fname)-1]=='z';
+-	void *fp = gz ? gzopen(fname,"wt") : fopen(fname,"wt");
++	void *fp = gz ? static_cast<void *>(gzopen(fname,"wt")) : fopen(fname,"wt");
+ 	if(!fp)		{	SetWarn(mglWarnOpen,fname);	return;	}
+ 	mgl_printf(fp, gz, "<?xml version=\"1.0\" standalone=\"no\"?>\n");
+ 	mgl_printf(fp, gz, "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20000303 Stylable//EN\" \"http://www.w3.org/TR/2000/03/WD-SVG-20000303/DTD/svg-20000303-stylable.dtd\">\n");
+@@ -620,7 +620,7 @@
+ 
+ 	for(i=0;i<pNum;i++)		if(P[i].type==-1)	P[i].type = 1;
+ 	mgl_printf(fp, gz, "</g></svg>");
+-	if(gz)	gzclose(fp);	else	fclose((FILE *)fp);
++	if(gz)	gzclose((gzFile)fp);	else	fclose((FILE *)fp);
+ }
+ //-----------------------------------------------------------------------------
+ void mglGraphPS::Finish()
+diff -urN mathgl-1.11.1.1/mgl/mgl_export.cpp mathgl-1.11.1.1-patched/mgl/mgl_export.cpp
+--- mathgl-1.11.1.1/mgl/mgl_export.cpp	2011-03-22 06:13:23.000000000 +1000
++++ mathgl-1.11.1.1-patched/mgl/mgl_export.cpp	2012-06-05 03:09:44.188230036 +1100
+@@ -232,7 +232,7 @@
+ 	va_start(lst,str);
+ 	vsprintf(buf,str,lst);
+ 	va_end(lst);
+-	if(gz)	gzprintf(fp, "%s", buf);
++	if(gz)	gzprintf((gzFile)fp, "%s", buf);
+ 	else	fprintf((FILE *)fp, "%s", buf);
+ }
+ //---------------------------------------------------------------------------
+@@ -243,7 +243,7 @@
+ 	register long i,j;
+ 	bool gz = fname[strlen(fname)-1]=='z';
+ 
+-	void *fp = gz ? gzopen(fname,"wt") : fopen(fname,"wt");
++	void *fp = gz ? static_cast<void *>(gzopen(fname,"wt")) : fopen(fname,"wt");
+ 	mgl_printf(fp, gz, "%%!PS-Adobe-3.0 EPSF-3.0\n%%%%BoundingBox: 0 0 %d %d\n",w,h);
+ 	mgl_printf(fp, gz, "%%%%Creator: MathGL library\n%%%%Title: %s\n", fname);
+ 	mgl_printf(fp, gz, "%%%%CreationDate: %s\n",ctime(&now));
+@@ -255,7 +255,7 @@
+ 		mgl_printf(fp, gz, "%02x%02x%02x",p[j][3*i],p[j][3*i+1],p[j][3*i+2]);
+ 	}
+ 	mgl_printf(fp, gz, "\n\nshowpage\n%%%%EOF\n");
+-	if(gz)	gzclose(fp);	else	fclose((FILE *)fp);
++	if(gz)	gzclose((gzFile)fp);	else	fclose((FILE *)fp);
+ 	return 0;
+ }
+ //-----------------------------------------------------------------------------
