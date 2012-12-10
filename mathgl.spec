@@ -295,3 +295,29 @@ popd
 
 %files -n %{staticdevelname}
 %{_libdir}/*.a
+
+
+%changelog
+* Mon Jun 04 2012 Andrey Bondrov <abondrov@mandriva.org> 1.11.1.1-2mdv2012.0
++ Revision: 802491
+- Add patch 4 to fix type conversions (gzFile <-> void*)
+- Don't use info-install for mdver > 201100 as RPM handles it with triggers now
+
+* Mon Jan 16 2012 Andrey Bondrov <abondrov@mandriva.org> 1.11.1.1-1
++ Revision: 761662
+- New version 1.11.1.1 (1.11.2 seems to be broken), update BuildRequires and patches
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - the mass rebuild of 2010.1 packages
+
+* Sat Jan 16 2010 Funda Wang <fwang@mandriva.org> 1.10-2mdv2010.1
++ Revision: 492255
+- rebuild for new libjpeg v8
+
+* Fri Jan 08 2010 Jérôme Brenier <incubusss@mandriva.org> 1.10-1mdv2010.1
++ Revision: 487407
+- BuildRequires : texi2html
+- BuildRequires : texinfo
+- import mathgl
+
+
