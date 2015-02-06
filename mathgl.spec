@@ -19,7 +19,7 @@
 Name:		mathgl
 # 1.11.2 seems to be broken
 Version:	1.11.1.1
-Release:	%mkrel 2
+Release:	3
 Summary:	Library for scientific graphics
 License:	GPLv2+
 Group:		System/Libraries
