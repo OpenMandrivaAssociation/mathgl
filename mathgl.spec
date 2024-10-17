@@ -23,7 +23,7 @@ Release:	3
 Summary:	Library for scientific graphics
 License:	GPLv2+
 Group:		System/Libraries
-Url:		http://mathgl.sourceforge.net/
+Url:		https://mathgl.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/mathgl/%{name}-%{version}.tar.gz
 Patch0:		mathgl-1.10-mdv-fix-fltk-include-path.patch
 Patch1:		mathgl-1.11.2-zlib.patch
