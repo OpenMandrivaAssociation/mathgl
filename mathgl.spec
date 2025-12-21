@@ -30,6 +30,11 @@ Patch1:		mathgl-1.11.2-zlib.patch
 Patch2:		mathgl-1.11.1.1-lz.patch
 Patch3:		mathgl-1.11.1.1-oct.patch
 Patch4:		mathgl-1.11.1.1-gz.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	qt4-devel
 BuildRequires:	gsl-devel
 BuildRequires:	GL-devel
